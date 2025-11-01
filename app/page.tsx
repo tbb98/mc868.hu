@@ -1,6 +1,27 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Home() {
+  const [showSetupButtons, setShowSetupButtons] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState<"companion" | "repeater" | null>(null);
+
+  const handleStartClick = () => {
+    setShowSetupButtons(true);
+  };
+
+  const handleSetupClick = (type: "companion" | "repeater") => {
+    setModalType(type);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setModalType(null);
+  };
+
   return (
     <div className="items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center">
@@ -21,6 +42,140 @@ export default function Home() {
           Általunk használt frekvencia és LoRa beállítások: EU/UK (Narrow) - 869.618Mhz / SF8 / BW62.5 / CR8
         </div>
 
+        {!showSetupButtons && (
+          <button
+            onClick={handleStartClick}
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-5 px-8 rounded text-lg"
+          >
+            START
+          </button>
+        )}
+
+        {showSetupButtons && (
+          <div className="grid grid-cols-2 gap-4 w-full max-w-md">
+            <button
+              onClick={() => handleSetupClick("companion")}
+              className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-4 rounded"
+            >
+              Companion?
+            </button>
+            <button
+              onClick={() => handleSetupClick("repeater")}
+              className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-4 rounded"
+            >
+              Repeater?
+            </button>
+          </div>
+        )}
+
+        {showModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-gray-800 rounded-lg p-8 max-w-2xl w-full mx-4 relative">
+              <button
+                onClick={handleCloseModal}
+                className="absolute top-4 right-4 text-white hover:text-gray-300 text-2xl font-bold"
+              >
+                ×
+              </button>
+              <h2 className="text-2xl font-bold mb-4 text-white">
+                {modalType === "companion" ? "Companion Node - A te kliensed" : "Repeater - Az ismétlő"}
+              </h2>
+              <div className="text-white">
+                {modalType === "companion" ? (
+                  <div className="space-y-4">
+                    <p>
+                      A companion node leszel te a mesh-en. Egyedi kulccsal, bluetooth-on / USB-n rákapcsolódva.
+                    </p>
+                    <p>
+                      A companion node nem ismétel, szüksége van elérhető repeaterre hogy tudj vele üzenni.
+                    </p>
+                    <p>
+                      Két companion hallótávolságon belül tud repeaterek nélkül is beszélgetni.
+                    </p>
+                    
+                    <h3 className="font-bold mt-6">Rövid leírás a feltétlen szükséges dolgokról:</h3>
+                    
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li>EU/UK Narrow rádióbeállításokat használunk</li>
+                      <li>A csatornákra advert nélkül is írhatsz</li>
+                      <li>
+                        Ahhoz hogy valakivel közvetlen tudj beszélgetni neked is és neki is advertelnie kell hogy publikus kulcsot cseréljetek. Enélkül nem tudsz ráírni másra és ő sem rád
+                        <ul className="list-disc pl-5 space-y-2 mt-2">
+                          <li>
+                            <strong>Flood advert:</strong> az egész mesh megkapja a kulcsodat, minden repeter ismétli
+                          </li>
+                          <li>
+                            <strong>Zero Hop advert:</strong> csak azok kapják meg a kulcsod akik közvetlen hallják a companion-odat
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        A mesh átnyúlik szlovákiába és Ausztriába így a Public csatornán főképp angolul beszélgetünk
+                      </li>
+                      <li>
+                        Hasznos csatornák (hashtag channelek, nem kell külön kód hozzájuk):
+                        <ul className="list-disc pl-5 space-y-2 mt-2">
+                          <li><strong>#hungary</strong> - magyaroknak magyarul</li>
+                          <li><strong>#ping</strong> - Botok gyűjtőhelye "Ping" szó beírására válaszolnak hány hoppon keresztül vették az üzeneted</li>
+                          <li><strong>#slovakia</strong> - szlovákok csatornája</li>
+                          <li><strong>#austria</strong> - osztrákok csatornája</li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <p>
+                      A Repeater node-ra nem lehet kapcsolódni bluetooth-al vagy wifivel, csak USB-n. Egyetlen dolga van: ismételni a fogadott csomagokat.
+                    </p>
+                    <p>
+                      Minden repeater egyszer ismétel minden csomagot, amit még nem ismételt.
+                    </p>
+                    
+                    <div className="mt-6">
+                      <h3 className="font-bold text-red-500 mb-2">FONTOS:</h3>
+                      <div className="space-y-2 font-semibold">
+                        <p>
+                          Ha repeatert csinálsz a kulcsod első két karaktere fogja azonosítani!
+                        </p>
+                        <p>
+                          Mivel ez véges számú azonosító, így már lehet lesz ilyen a meshen.
+                        </p>
+                        <p>
+                          Mindenkinek egyedi azonosítót kell beállítania hogy ne legyen ütközés.
+                        </p>
+                        <p>
+                          A{" "}
+                          <a
+                            href="https://map.mc868.hu/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-400 hover:text-blue-300 underline"
+                          >
+                            map.mc868.hu
+                          </a>{" "}
+                          jobb felső sarkában találsz egy{" "}
+                          <a
+                            href="https://map.mc868.hu/config/repeater-setup.html"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-400 hover:text-blue-300 underline"
+                          >
+                            "Repeater Setup"
+                          </a>{" "}
+                          gombot, a repeatered USB-n rádugva a gépre ezzel az oldallal szinte mindent beállíthatsz rajta.
+                        </p>
+                        <p>
+                          A Private / Public Key résznél Auto-choose non-colliding gomb, majd Generate és Save&Set gombokat nyomd végig, így olyan kulcsot kap a repeatered amit tuti nem használ még senki!
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-2 gap-4">
           <a href="https://t.me/+63o5qlHPrl1iNjc0" target="_blank" rel="noopener noreferrer">
