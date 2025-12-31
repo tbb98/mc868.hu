@@ -38,10 +38,6 @@ export default function Home() {
             Üdvözlünk a magyar MeshCore közösség weboldalán.
         </div>
 
-        <div className="list-inside max-w-3xl  list-decimal text-sm text-center sm:text-center font-[family-name:var(--font-geist-mono)]">
-          Általunk használt frekvencia és LoRa beállítások: EU/UK (Narrow) - 869.618Mhz / SF8 / BW62.5 / CR8
-        </div>
-
         {!showSetupButtons && (
           <button
             onClick={handleStartClick}
