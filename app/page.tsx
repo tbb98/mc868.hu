@@ -27,7 +27,7 @@ export default function Home() {
       <main className="flex flex-col gap-8 row-start-2 items-center">
         <Image
           className="light:invert"
-          src="/meshcore-logo.png"
+          src="/meshcore_tm.svg"
           alt="MeshCore logo"
           width={450}
           height={48}
