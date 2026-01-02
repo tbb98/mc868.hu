@@ -31,7 +31,7 @@ export default function Home() {
           alt="MeshCore logo"
           width={450}
           height={48}
-          priority
+          preload
         />
 
         <div className="list-inside list-decimal text-center sm:text-center font-[family-name:var(--font-geist-mono)]">
