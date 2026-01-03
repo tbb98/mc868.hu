@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import Header from "./components/Header";
+import Navbar from "./components/Navbar";
+import ParticlesClassic from "./components/ParticlesClassic";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,17 +25,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <Analytics/>
-      <SpeedInsights/>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <ParticlesClassic />
+        <Header />
+        <Navbar />
+        <main>{children}</main>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

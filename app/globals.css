@@ -22,6 +22,14 @@
   }
 }
 
+header{
+  background-color: #213049
+}
+
+navbar{
+  background-color: #284662
+}
+
 html {
   color-scheme: dark;
 }
@@ -35,10 +43,18 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Subtle polish */
 a {
-  color: var(--accent);
+  color: yellow;
   text-decoration: none;
+}
+
+.navbaritem a {
+  color: white;
+  font-family: var(--font-mono);
+}
+
+.navbaritem a:hover {
+  color: rgb(160, 215, 225);
 }
 
 a:hover {
