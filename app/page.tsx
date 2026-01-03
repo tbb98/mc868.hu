@@ -43,12 +43,6 @@ export default function Home() {
               </a>
         </div>
 
-        <button
-          onClick={() => handleSetupClick("settings")}
-          className="bg-gray-700 text-white font-bold py-5 px-8 rounded text-lg"
-        >
-          Beállítások
-        </button>
 
 
 
