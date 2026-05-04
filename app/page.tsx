@@ -102,7 +102,7 @@ export default function Home() {
                         <p><strong>Airtime Factor:</strong> 1 (alapértelmezett)</p>
                       </div>
                       <p className="mt-2 text-sm">
-                        <strong>Fontos:</strong> Az EU-ban a duty cycle limit 10%, ami az Airtime Factor 9-et igényelné. Mivel a MeshCore nem sok adatot küld és a duty cycle valóságban 1% alatt van, az AF=1 ajánlott. A meshcore-ban az AF azt jelöli hogy az előző adás hányszorosát várja a következő adás előtt a node. (Szegény ember duty cycle-je)
+                        <strong>Fontos:</strong> Az EU-ban a duty cycle limit 10%, ami az Airtime Factor 9-et igényelné. Nem ez az alapbeállítás. Át lehet állítani, nagyon ritkán fogja elérni a limitet, főleg egy háztetőn.
                       </p>
                     </div>
 
@@ -112,6 +112,16 @@ export default function Home() {
                         <li>
                           <strong>Név és lokáció:</strong> Adj nevet a node-odnak és bármilyen lokációt. (Még ha nem is pontos akkor is érdemes valami hozzád közeli pontra beállítani, hogy látszódjon nagyjából merre vagy.)
                         </li>
+                        <li>
+                          <strong>Névkonvenció:</strong> Repeater nevek HU- előtaggal kezdődjenek, utána érdemes az <a
+                          href="https://hu.wikipedia.org/wiki/ISO_3166-2:HU"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-400 hover:text-blue-300 underline"
+                        >
+                          ISO kódot
+                        </a> írni, majd egy tetszőleges nevet, pl: HU-BU-Hegedus. Companionnak ne adjunk HU- előtagot, ezt tartsuk meg a repeatereknek.
+                        </li>
                       </ul>
                     </div>
 
@@ -119,7 +129,7 @@ export default function Home() {
                       <h3 className="font-bold text-lg mb-3">
                         Repeater Beállítások{" "}
                         <a
-                          href="https://map.mc868.hu/config/repeater-setup.html"
+                          href="https://config.meshcore.io"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-400 hover:text-blue-300 underline"
@@ -132,7 +142,7 @@ export default function Home() {
                           <strong>Admin Password:</strong> Állíts be saját jelszót (alap: "password")
                         </li>
                         <li>
-                          <strong>Guest Password:</strong> Hagyd üresen, hogy mások is láthassák az alap statisztikákat ( vagy ne ha nem szeretnéd hogy lássák :))
+                          <strong>Guest Password:</strong> Hagyd üresen, hogy mások is láthassák az alap statisztikákat ( vagy ne, ha nem szeretnéd hogy lássák :))
                         </li>
                         <li>
                           <strong>ACL hozzáférés:</strong> Ha nem akarod kiadni a jelszavad de szeretnéd hogy egy kliens hozzáférhessen a repeateredhez akkor itt a publikus kulcsát megadva "megengedheted" hogy belépjen jelszó nélkül is
@@ -141,13 +151,13 @@ export default function Home() {
                           <strong>Zero-Hop Advert:</strong> 0 (letiltva, mert a Flood Advert lefedi)
                         </li>
                         <li>
-                          <strong>Flood Advert:</strong> 12 óra (ajánlott/alap a kevés forgalom miatt)
+                          <strong>Flood Advert:</strong> minimum 25 óra (ajánlott a kevesebb forgalom miatt)
                         </li>
                         <li>
-                          <strong>Private / Public Key:</strong> Mivel elég nagy a mesh, így fontos hogy egyedi kulcsod legyen. Ezt a repeater setupnál tudod generálni magadnak (Auto-Choose Non-Colliding vagy kézzel kitallózva a listából)
+                          <strong>Private / Public Key:</strong> 2-byte-ra állítva már nem számít, ha kell valami szép akkor itt lehet frissíteni.
                         </li>
                         <li>
-                          <strong>Idő beállítása:</strong> Jó hogyha a repeaterednek pontos idő van beállítva, mert csak úgy dolgozzák fel az adverteket mások. Az Android/iOS alkalmazással "Remote Management" opcióval állítható be egy Companion Node-ot használva. Rebootok után mindig szükséges (a legtöbb fajta hardware-en, nem mindegyiken)
+                          <strong>Idő beállítása:</strong> Jó hogyha a repeaterednek pontos idő van beállítva, mert csak úgy dolgozzák fel az adverteket mások. Az Android/iOS alkalmazással "Remote Management" opcióval állítható be egy Companion Node-ot használva. Rebootok után mindig szükséges (nRF-eken mindig resetel, ESP-ken van hogy nem)
                         </li>
                         <li>
                           <strong>Térkép:</strong> A térképre automatikusan fel fogsz kerülni ha eléred a mesh-t, nem szükséges manuálisan hozzáadni semmit sehova
@@ -197,7 +207,8 @@ export default function Home() {
                         Hasznos csatornák (hashtag channelek, nem kell külön kód hozzájuk):
                         <ul className="list-disc pl-5 space-y-2 mt-2">
                           <li><strong>#hungary</strong> - magyaroknak magyarul</li>
-                          <li><strong>#ping</strong> - Botok gyűjtőhelye "Ping" szó beírására válaszolnak hány hoppon keresztül vették az üzeneted</li>
+                          <li><strong>#ping</strong> - "Ping" szó beírására általában mások válaszolnak hány hoppon keresztül vették az üzeneted</li>
+                          <li><strong>#test</strong> - Ugyanolyan teszt csatorna mint a #ping. Inkább ezt a kettőt használjuk tesztre mint a Public-ot</li>
                           <li><strong>#slovakia</strong> - szlovákok csatornája</li>
                           <li><strong>#austria</strong> - osztrákok csatornája</li>
                         </ul>
@@ -212,42 +223,22 @@ export default function Home() {
                     <p>
                       Minden repeater egyszer ismétel minden csomagot, amit még nem ismételt.
                     </p>
-                    
+                    <p>
+                      Repeatert akkor érdemes csak telepíteni, ha más repeatert nem vagy csak nagyon rosszul hall a companionod és van magas helyed egy jobb antennával.
+                      Érdemes telegrammon vagy a mesh-en kérdezősködni előtte, mert egy rossz helyre / rosszul telepített repeater csak az ütközéseket növeli.
+                    </p>
+
                     <div className="mt-6">
                       <h3 className="font-bold text-red-500 mb-2">FONTOS:</h3>
                       <div className="space-y-2 font-semibold">
                         <p>
-                          Ha repeatert csinálsz a kulcsod első két karaktere fogja azonosítani!
+                          Ha repeatert csinálsz a kulcsod első két karaktere fogja azonosítani, 2-byte-nál az első 4!
                         </p>
                         <p>
-                          Mivel ez véges számú azonosító, így már lehet lesz ilyen a meshen.
+                          2-byte advertre állni a router parancssorába beírt "set path.hash.mode 1" paranccsal lehet. A mesh nagy része 2-byte képes, így nyugodtan elvégezhető telepítésnél.
                         </p>
                         <p>
-                          Mindenkinek egyedi azonosítót kell beállítania hogy ne legyen ütközés.
-                        </p>
-                        <p>
-                          A{" "}
-                          <a
-                            href="https://map.mc868.hu/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-400 hover:text-blue-300 underline"
-                          >
-                            map.mc868.hu
-                          </a>{" "}
-                          jobb felső sarkában találsz egy{" "}
-                          <a
-                            href="https://map.mc868.hu/config/repeater-setup.html"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-400 hover:text-blue-300 underline"
-                          >
-                            "Repeater Setup"
-                          </a>{" "}
-                          gombot, a repeatered USB-n rádugva a gépre ezzel az oldallal szinte mindent beállíthatsz rajta.
-                        </p>
-                        <p>
-                          A Private / Public Key résznél Auto-choose non-colliding gomb, majd Generate és Save&Set gombokat nyomd végig, így olyan kulcsot kap a repeatered amit tuti nem használ még senki!
+                          Mindenkinek egyedi azonosítót kell beállítania hogy ne legyen ütközés, ez 2-byte-nál nem nehéz, az auto-generált statisztikailag nehezen fog ütközni.
                         </p>
                       </div>
                     </div>
@@ -271,7 +262,7 @@ export default function Home() {
             </button>
           </a>
 
-          <a href="https://meshcore.co.uk" target="_blank" rel="noopener noreferrer">
+          <a href="https://meshcore.io/" target="_blank" rel="noopener noreferrer">
             <button className="bg-gray-700 text-white font-bold py-4 px-4 rounded w-full">
               Hivatalos oldal
             </button>
@@ -283,13 +274,13 @@ export default function Home() {
             </button>
           </a>
 
-          <a href="https://map.mc868.hu/" target="_blank" rel="noopener noreferrer">
+          <a href="https://map.meshcore.hu/" target="_blank" rel="noopener noreferrer">
             <button className="bg-gray-700 text-white font-bold py-4 px-4 rounded w-full">
               Magyar "élő" mesh térkép
             </button>
           </a>
 
-          <a href="https://meshcore.co.uk/map.html" target="_blank" rel="noopener noreferrer">
+          <a href="https://map.meshcore.io/" target="_blank" rel="noopener noreferrer">
             <button className="bg-gray-700 text-white font-bold py-4 px-4 rounded w-full">
               Hivatalos térkép
             </button>
